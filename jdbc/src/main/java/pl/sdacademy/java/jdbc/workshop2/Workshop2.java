@@ -2,13 +2,15 @@ package pl.sdacademy.java.jdbc.workshop2;
 
 import pl.sdacademy.java.jdbc.utils.ApplicationPropertiesProvider;
 
+import java.sql.*;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
 /*
-    * Zmodyfikuj poprzedni program tak, aby ładować miasta według podanego przez użytkownika kraju.
-    * Co się stanie, jeśli użytkownik poda tekst `Narnia ' OR 'x' = 'x`?
-    * Jak można temu zapobiec?
+ * Zmodyfikuj poprzedni program tak, aby ładować miasta według podanego przez użytkownika kraju.
+ * Co się stanie, jeśli użytkownik poda tekst `Narnia ' OR 'x' = 'x`?
+ * Jak można temu zapobiec?
  */
 public class Workshop2 {
 
@@ -23,6 +25,18 @@ public class Workshop2 {
     }
 
     public static List<String> getCities(String jdbcUrl, String countryName) {
-        throw new UnsupportedOperationException("TODO");
+        final List<String> cities = new LinkedList<>();
+        try (final Connection connection = DriverManager.getConnection(jdbcUrl)) {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT city FROM city JOIN country ON country.country_id = city.country_id WHERE country = ?");
+            preparedStatement.setString(1, countryName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                cities.add(resultSet.getString("city"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return cities;
     }
 }
