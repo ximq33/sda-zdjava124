@@ -71,7 +71,17 @@ public class Workshop4 {
      * @return id of the newly created rental record.
      */
     private static int addRental(Connection connection, int inventoryId, int customerId, int staffId) throws SQLException {
-        throw new UnsupportedOperationException("TODO");
+        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO rental(rental_date, inventory_id, customer_id, staff_id)" +
+                "VALUES(NOW(), ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
+
+        preparedStatement.setInt(1, inventoryId);
+        preparedStatement.setInt(2, customerId);
+        preparedStatement.setInt(3, staffId);
+        preparedStatement.executeUpdate();
+        final var rs = preparedStatement.getGeneratedKeys();
+        rs.next();
+        return rs.getInt(1);
+
     }
 
     /*
