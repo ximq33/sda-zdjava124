@@ -1,10 +1,12 @@
 package pl.sdacademy.java.jdbc.workshop4;
 
+import pl.sdacademy.java.jdbc.model.Film;
+import pl.sdacademy.java.jdbc.model.Rating;
 import pl.sdacademy.java.jdbc.utils.ApplicationPropertiesProvider;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.Calendar;
 import java.util.Optional;
 
 /*
@@ -25,8 +27,7 @@ public class Workshop4 {
 
         if (result.isPresent()) {
             System.out.printf("Id wypożyczenia: %d\n", result.get());
-        }
-        else {
+        } else {
             System.out.println("Brak towaru na stanie :(");
         }
     }
@@ -83,6 +84,14 @@ public class Workshop4 {
         VALUES(P_CUSTOMER_ID, P_STAFF_ID, P_RENTAL_ID, P_AMOUNT, NOW());
      */
     private static void addPayment(Connection connection, int customerId, int staffId, int rentalId, BigDecimal amount) throws SQLException {
-        throw new UnsupportedOperationException("TODO");
+
+        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO payment (customer_id, staff_id, rental_id, amount, payment_date)\n" +
+                "        VALUES(?, ?, ?, ?, NOW());");
+        preparedStatement.setInt(1, customerId);
+        preparedStatement.setInt(2, staffId);
+        preparedStatement.setInt(3, rentalId);
+        preparedStatement.setBigDecimal(4, amount);
+        preparedStatement.executeUpdate();
     }
 }
+
