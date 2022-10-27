@@ -1,7 +1,5 @@
 package pl.sdacademy.java.jdbc.workshop4;
 
-import pl.sdacademy.java.jdbc.model.Film;
-import pl.sdacademy.java.jdbc.model.Rating;
 import pl.sdacademy.java.jdbc.utils.ApplicationPropertiesProvider;
 
 import java.math.BigDecimal;
@@ -26,7 +24,8 @@ public class Workshop4 {
 
         if (result.isPresent()) {
             System.out.printf("Id wypożyczenia: %d\n", result.get());
-        } else {
+        }
+        else {
             System.out.println("Brak towaru na stanie :(");
         }
     }
@@ -74,9 +73,6 @@ public class Workshop4 {
     /**
      * @return rental rate of given inventory or empty optional if not available or zero.
      */
-
-
-
     private static Optional<BigDecimal> getRentalRate(Connection connection, int inventoryId) throws SQLException {
 
 
