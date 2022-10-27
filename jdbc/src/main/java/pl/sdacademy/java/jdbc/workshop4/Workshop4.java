@@ -1,12 +1,9 @@
 package pl.sdacademy.java.jdbc.workshop4;
 
-import pl.sdacademy.java.jdbc.model.Film;
-import pl.sdacademy.java.jdbc.model.Rating;
 import pl.sdacademy.java.jdbc.utils.ApplicationPropertiesProvider;
 
 import java.math.BigDecimal;
 import java.sql.*;
-import java.util.Calendar;
 import java.util.Optional;
 
 /*
