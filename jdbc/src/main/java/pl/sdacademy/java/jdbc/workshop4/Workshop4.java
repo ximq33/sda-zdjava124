@@ -27,7 +27,8 @@ public class Workshop4 {
 
         if (result.isPresent()) {
             System.out.printf("Id wypożyczenia: %d\n", result.get());
-        } else {
+        }
+        else {
             System.out.println("Brak towaru na stanie :(");
         }
     }
