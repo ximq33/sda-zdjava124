@@ -37,7 +37,6 @@ public class Workshop4 {
      * @return rentalId or {@code null} if given inventory is either not present or rented.
      */
     public static Optional<Integer> rentDvd(String jdbcUrl, int inventoryId, int customerId, int staffId) throws RentalException {
-
         throw new UnsupportedOperationException("TODO");
     }
 
