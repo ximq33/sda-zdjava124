@@ -1,10 +1,11 @@
 package pl.sdacademy.java.jdbc.workshop4;
 
+import pl.sdacademy.java.jdbc.model.Film;
+import pl.sdacademy.java.jdbc.model.Rating;
 import pl.sdacademy.java.jdbc.utils.ApplicationPropertiesProvider;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Optional;
 
 /*
@@ -25,8 +26,7 @@ public class Workshop4 {
 
         if (result.isPresent()) {
             System.out.printf("Id wypożyczenia: %d\n", result.get());
-        }
-        else {
+        } else {
             System.out.println("Brak towaru na stanie :(");
         }
     }
@@ -74,8 +74,24 @@ public class Workshop4 {
     /**
      * @return rental rate of given inventory or empty optional if not available or zero.
      */
+
+
+
     private static Optional<BigDecimal> getRentalRate(Connection connection, int inventoryId) throws SQLException {
-        throw new UnsupportedOperationException("TODO");
+
+
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT rental_rate FROM inventory JOIN film USING(film_id) WHERE %s = P_INVENTORY_ID AND rental_rate <> 0");
+        preparedStatement.setInt(1, inventoryId);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+
+        if (!resultSet.next()) {
+            return Optional.empty();
+        }
+
+        return  Optional.ofNullable(resultSet.getBigDecimal(1));
+
     }
 
     /*
