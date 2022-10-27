@@ -37,7 +37,32 @@ public class Workshop4 {
      * @return rentalId or {@code null} if given inventory is either not present or rented.
      */
     public static Optional<Integer> rentDvd(String jdbcUrl, int inventoryId, int customerId, int staffId) throws RentalException {
-        throw new UnsupportedOperationException("TODO");
+        try (final var connection = DriverManager.getConnection(jdbcUrl)) {
+            try {
+                connection.setAutoCommit(false);
+                connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+
+                if (!isInventoryInStock(connection, inventoryId)) {
+                    return Optional.empty();
+                }
+
+                final var rentalId = addRental(connection, inventoryId, customerId, staffId);
+
+                final var rentalRate = getRentalRate(connection, inventoryId)
+                    .orElseThrow(() -> new RentalException("Missing rental rate for inventoryId: " + inventoryId));
+
+                addPayment(connection, customerId, staffId, rentalId, rentalRate);
+
+                connection.commit();
+                return Optional.of(rentalId);
+            } catch (Exception exception) {
+                connection.rollback();
+                throw exception;
+            }
+        }
+        catch (SQLException sqlException) {
+            throw new RentalException(sqlException);
+        }
     }
 
     /*
@@ -94,7 +119,7 @@ public class Workshop4 {
     private static Optional<BigDecimal> getRentalRate(Connection connection, int inventoryId) throws SQLException {
 
 
-        PreparedStatement preparedStatement = connection.prepareStatement("SELECT rental_rate FROM inventory JOIN film USING(film_id) WHERE %s = P_INVENTORY_ID AND rental_rate <> 0");
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT rental_rate FROM inventory JOIN film USING(film_id) WHERE inventory_id = ? AND rental_rate <> 0;");
         preparedStatement.setInt(1, inventoryId);
 
         ResultSet resultSet = preparedStatement.executeQuery();
