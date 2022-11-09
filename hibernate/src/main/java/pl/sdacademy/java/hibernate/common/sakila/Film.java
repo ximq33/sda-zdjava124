@@ -1,6 +1,5 @@
 package pl.sdacademy.java.hibernate.common.sakila;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class Film {
@@ -51,10 +50,6 @@ public class Film {
 
     public void setOriginalLanguage(Language originalLanguage) {
         this.originalLanguage = originalLanguage;
-    }
-
-    public LocalDateTime getLastUpdate() {
-        return lastUpdate;
     }
 
     public List<Actor> getActors() {
