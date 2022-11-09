@@ -2,8 +2,6 @@ package pl.sdacademy.java.hibernate.common.sakila;
 
 import jakarta.persistence.*;
 
-import javax.naming.Name;
-
 @Entity
 public class Address {
     @Id
